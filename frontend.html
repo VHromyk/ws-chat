@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .close-btn {
+            display: none;
+        }
+        .close-btn.visible {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<button class="close-btn" id="close-socket" type="button">Close connection</button>
+<script>
+    const btnCloseConnection = document.getElementById('close-socket');
+
+    const handleCloseConnection = () => {
+        socket.close()
+    }
+
+
+    const socket = new WebSocket('ws://localhost:5000');
+
+//    Успішно підключились
+    socket.onopen = () => {
+            btnCloseConnection.classList.add('visible');
+            btnCloseConnection.addEventListener('click', handleCloseConnection)
+
+
+        // console.log('Frontend connection')
+    }
+
+//    Читаєм повідомлення з бекенду
+
+    socket.onmessage = (e) => {
+        console.log(e.data)
+    }
+
+    // Закриваєм сокет
+
+    socket.onclose = () => {
+        btnCloseConnection.classList.remove('visible')
+        btnCloseConnection.removeEventListener('click', handleCloseConnection);
+    }
+</script>
+</body>
+</html>
